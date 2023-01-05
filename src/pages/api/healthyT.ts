@@ -11,7 +11,7 @@ const health = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const responseText = rand == 1 ? "Healthy" : "Unhealthy";
     res.status(200).json({
-        response: 200,
+        status: 200,
     });
 };
 
