@@ -1,11 +1,14 @@
 import type {NextPage} from "next";
 import Head from "next/head";
 import axios from "axios";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import DatePicker from "react-datepicker"
+import {HealthRes} from "./api/health";
+
 
 const Home: NextPage = () => {
     const [status, setStatus] = useState("");
+    const [healthText, setHealthtext] = useState("Updating health...");
     const [date, setDate] = useState<Date | null>(new Date())
 
     async function sendWater(date: Date) {
@@ -17,8 +20,16 @@ const Home: NextPage = () => {
             setStatus("Success :)")
         }
         return await res.data;
-
     }
+
+    useEffect(() => {
+        const fetchHealth = async() => {
+            const res = await axios.get<HealthRes>("/api/health");
+            const data = await res.data;
+            setHealthtext(data.responseText);
+        }
+        fetchHealth();
+    }, [])
 
     return (
         <>
@@ -42,6 +53,11 @@ const Home: NextPage = () => {
                         </button>
                     ) : null}
                     <p className={"text-2xl"}>{status}</p>
+                </div>
+
+                <div className={"flex flex-col p-5 items-center"}>
+                    <h2 className={"text-2xl font-semibold"}>Health check:</h2>
+                    <p className={`text-3xl font-bold ${healthText == "Healthy" ? "text-green-500" : "text-red-600"}`}>{healthText}</p>
                 </div>
             </main>
         </>
