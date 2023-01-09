@@ -6,10 +6,11 @@ export interface HealthRes {
 }
 
 const health = async (req: NextApiRequest, res: NextApiResponse) => {
-    const waterRes = await axios.get("http://localhost:9000/water");
-    const rand = Math.floor(Math.random() * 2) + 1;
-
-    const responseText = rand == 1 ? "Healthy" : "Unhealthy";
+    const waterRes = await axios.get("http://192.168.2.70:9000/health");
+    let responseText = "Unhealthy";
+    if (waterRes.status == 200) {
+       responseText = "Healthy";
+    }
     res.status(200).json({
         status: responseText,
     });
