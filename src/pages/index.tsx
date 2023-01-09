@@ -4,11 +4,13 @@ import axios from "axios";
 import {useEffect, useState} from "react";
 import DatePicker from "react-datepicker"
 import {HealthRes} from "./api/health";
+import {MoistRes} from "./api/moist";
 
 
 const Home: NextPage = () => {
     const [status, setStatus] = useState("");
     const [healthText, setHealthtext] = useState("Updating health...");
+    const [moistText, setMoistText] = useState("Fetching moist...");
     const [date, setDate] = useState<Date | null>(new Date())
 
     async function sendWater(date: Date) {
@@ -28,7 +30,14 @@ const Home: NextPage = () => {
             const data = await res.data;
             setHealthtext(data.responseText);
         }
+
+        const fetchMoist = async() => {
+            const res = await axios.get<MoistRes>("/api/health");
+            const data = await res.data;
+            setMoistText(data.responseText);
+        }
         fetchHealth();
+        fetchMoist()
     }, [])
 
     return (
@@ -58,6 +67,10 @@ const Home: NextPage = () => {
                 <div className={"flex flex-col p-5 items-center"}>
                     <h2 className={"text-2xl font-semibold"}>Health check:</h2>
                     <p className={`text-3xl font-bold ${healthText == "Healthy" ? "text-green-500" : "text-red-600"}`}>{healthText}</p>
+                </div>
+                <div className={"flex flex-col p-5 items-center"}>
+                    <h2 className={"text-2xl font-semibold"}>Moist:</h2>
+                    <p className={`text-3xl font-bold ${moistText == "Healthy" ? "text-green-500" : "text-red-600"}`}>{moistText}</p>
                 </div>
             </main>
         </>
