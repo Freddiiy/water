@@ -32,7 +32,7 @@ const Home: NextPage = () => {
         }
 
         const fetchMoist = async() => {
-            const res = await axios.get<MoistRes>("/api/health");
+            const res = await axios.get<MoistRes>("/api/moist");
             const data = await res.data;
             setMoistText(data.responseText);
         }
