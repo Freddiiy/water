@@ -5,10 +5,9 @@ export interface MoistRes {
 }
 
 const moist = async (req: NextApiRequest, res: NextApiResponse<MoistRes>) => {
-    const waterRes = await axios.get("http://192.168.2.70:9000/moist");
+    const waterRes = await axios.get<M>("http://192.168.2.70:9000/moist");
     const data = await waterRes.data;
     if (waterRes.status == 200) {
-        console.log(data);
         res.status(200).json({
             responseText: data,
         });
