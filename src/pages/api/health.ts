@@ -5,7 +5,7 @@ export interface HealthRes {
     responseText: string,
 }
 
-const health = async (req: NextApiRequest, res: NextApiResponse) => {
+const health = async (req: NextApiRequest, res: NextApiResponse<HealthRes>) => {
     const waterRes = await axios.get("http://192.168.2.70:9000/health");
     const data = waterRes.data;
     let responseText = "Unhealthy";
@@ -14,7 +14,7 @@ const health = async (req: NextApiRequest, res: NextApiResponse) => {
        responseText = "Healthy";
     }
     res.status(200).json({
-        status: responseText,
+        responseText: responseText,
     });
 };
 
