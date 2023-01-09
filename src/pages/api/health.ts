@@ -1,4 +1,3 @@
-// src/pages/api/examples.ts
 import axios from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
 export interface HealthRes {
