@@ -10,6 +10,17 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Example {
+model Water {
     id String @id @default(cuid())
+    ip String @id
+    isWatering Boolean @default(false)
+    moistData MoistData[]
+}
+
+model MoistData {
+    id String @id @default(cuid())
+    createdAt DateTime @default(now())
+    value Int
+    water Water @relation(fields: [waterId], references: [id])
+    waterId String
 }
