@@ -11,9 +11,10 @@ datasource db {
 }
 
 model Water {
-    id String @id @default(cuid())
-    ip String @id
+    id Int @id @default(autoincrement())
+    ip String @unique
     isWatering Boolean @default(false)
+    waterTimeInMs Int @default(1000)
     moistData MoistData[]
 }
 
