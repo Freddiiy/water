@@ -8,9 +8,9 @@ export interface Fail {
 const moist = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method == "POST") {
 
-        const moist = req.body.moisturePercent;
+        const moist:number = req.body.moisturePercent;
 
-        if (!moist) {
+        if (moist > -1) {
             res.status(400).json({
                 success: false,
             });

@@ -108,7 +108,7 @@ const Home: NextPage = () => {
                             <p>{m.value}</p>
                             <p>{m.createdAt.toString()}</p>
                         </div>
-                    )) : <p>Fetching moisture data..</p>}
+                    )) : <p>{moistText}</p>}
                 </div>
             </main>
         </>
