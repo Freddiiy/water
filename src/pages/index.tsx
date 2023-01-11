@@ -103,12 +103,12 @@ const Home: NextPage = () => {
                     <p className={`text-3xl font-bold ${healthText == "Healthy" ? "text-green-500" : "text-red-600"}`}>{healthText}</p>
                 </div>
                 <div className={"flex flex-col p-5 items-center"}>
-                    {moist ? moist.map((m) => (
+                    {moist ? (moist.map((m) => (
                         <div key={m.createdAt.toString()}>
                             <p>{m.value}</p>
                             <p>{m.createdAt.toString()}</p>
                         </div>
-                    )) : <p>{moistText}</p>}
+                    ))) : <p>{moistText}</p>}
                 </div>
             </main>
         </>
