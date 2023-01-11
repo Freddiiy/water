@@ -11,9 +11,11 @@ export interface MoistData {
 }
 
 const moist = async (req: NextApiRequest, res: NextApiResponse) => {
+    console.log("aaaaaaaaaaaa")
     if (req.method == "POST") {
 
         const moist = req.body.moisturePercent;
+        console.log("bbbbbbbbbbbbbb")
 
         if (!moist) {
             res.status(400);
