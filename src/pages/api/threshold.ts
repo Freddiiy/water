@@ -2,18 +2,17 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import {prisma} from "../../server/db/client";
 
 const water = async (req: NextApiRequest, res: NextApiResponse) => {
-    const wateringTime = req.body.waterTimeInMs
-    const setWatering = await prisma.water.update({
+    const threshold = req.body.threshold;
+    const setThreshold = await prisma.water.update({
         where: {
             id: 1,
         },
         data: {
-            isWatering: true,
-            waterTimeInMs: wateringTime,
+            threshold: threshold,
         }
     })
 
-    if (setWatering) {
+    if (setThreshold) {
         res.status(200).json({
             success: true,
         });

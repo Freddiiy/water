@@ -1,7 +1,7 @@
 import type {NextPage} from "next";
 import Head from "next/head";
 import axios from "axios";
-import {useEffect, useState} from "react";
+import {ChangeEvent, useEffect, useState} from "react";
 import DatePicker from "react-datepicker"
 import {HealthRes} from "./api/health";
 import {MoistRes} from "./api/moist";
@@ -11,27 +11,47 @@ const Home: NextPage = () => {
     const [status, setStatus] = useState("");
     const [healthText, setHealthtext] = useState("Updating health...");
     const [moistText, setMoistText] = useState("Fetching moist...");
-    const [date, setDate] = useState<Date | null>(new Date())
+    const [waterTimeInMs, setWaterTimeInMs] = useState<number>(1000);
+    const [threshold, setThreshold] = useState<number>(40);
+    const [thresholdStatus, setThresholdStatus] = useState("");
 
-    async function sendWater(date: Date) {
-        const res = await axios.post(`/api/water`);
+    async function sendWater() {
+        const res = await axios.post(`/api/water`, {
+            waterTimeInMs: waterTimeInMs,
+        });
+
         if (res.status == 500) {
             setStatus("ERROR!!!!!");
         }
         if (res.status == 200) {
             setStatus("Success :)")
         }
+        resetAlert()
+        return await res.data;
+    }
+    async function sendThreshold() {
+        const res = await axios.post(`/api/threshold`, {
+            threshold: threshold,
+        });
+
+        if (res.status == 500) {
+            setThresholdStatus("ERROR!!!!!");
+        }
+        if (res.status == 200) {
+            setThresholdStatus(`Success updated threshold to ${threshold}`)
+        }
+        resetAlert();
         return await res.data;
     }
 
     useEffect(() => {
-        const fetchHealth = async() => {
+        const fetchHealth = async () => {
             const res = await axios.get<HealthRes>("/api/health");
             const data = await res.data;
             setHealthtext(data.responseText);
         }
 
-        const fetchMoist = async() => {
+        const fetchMoist = async () => {
             const res = await axios.get<MoistRes>("/api/moist");
             const data = await res.data;
             setMoistText(data.responseText);
@@ -40,6 +60,12 @@ const Home: NextPage = () => {
         fetchMoist()
     }, [])
 
+    async function resetAlert() {
+        await setTimeout(() => {
+            setThresholdStatus("");
+            setStatus("")
+        }, 3000)
+    }
     return (
         <>
             <Head>
@@ -50,18 +76,25 @@ const Home: NextPage = () => {
 
             <main className="mx-auto flex flex-col h-screen justify-center items-center">
                 <h1 className={"text-4xl font-bold"}>Water my plants g</h1>
-                <div className={"flex flex-row"}>
-                    <DatePicker selected={date} onChange={(date) => setDate(date)} />
-                </div>
                 <div>
-                    {date ? (
-                        <button
-                            className={"p-2 bg-purple-600 hover:bg-purple-700 rounded-lg text-white font-semibold"}
-                            onClick={() => sendWater(date)}>
-                            Water
-                        </button>
-                    ) : null}
+                    <input type={"number"} value={waterTimeInMs} onChange={(e) => setWaterTimeInMs(Number(e.target.value))}/>
+                    <button
+                        className={"p-2 bg-purple-600 hover:bg-purple-700 rounded-lg text-white font-semibold"}
+                        onClick={() => sendWater()}>
+                        Water
+                    </button>
                     <p className={"text-2xl"}>{status}</p>
+                </div>
+
+                <div className={"pt-10"}>
+                    <h2 className={"text-2xl font-bold text-center"}>Set new threshold</h2>
+                    <input type={"number"} value={threshold} onChange={(e) => setThreshold(Number(e.target.value))}/>
+                    <button
+                        className={"p-2 bg-purple-600 hover:bg-purple-700 rounded-lg text-white font-semibold"}
+                        onClick={() => sendThreshold()}>
+                        Update
+                    </button>
+                    <p className={"text-2xl"}>{thresholdStatus}</p>
                 </div>
 
                 <div className={"flex flex-col p-5 items-center"}>

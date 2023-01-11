@@ -6,22 +6,19 @@ generator client {
 }
 
 datasource db {
-    provider = "sqlite"
+    provider = env("DATABASE_TYPE")
     url      = env("DATABASE_URL")
 }
 
 model Water {
-    id Int @id @default(autoincrement())
-    ip String @unique
+    id Int @id @default(1)
     isWatering Boolean @default(false)
     waterTimeInMs Int @default(1000)
-    moistData MoistData[]
+    threshold Int @default(40)
 }
 
 model MoistData {
     id Int @id @default(autoincrement())
     createdAt DateTime @default(now())
     value Int
-    water Water @relation(fields: [waterId], references: [id])
-    waterId Int @unique
 }

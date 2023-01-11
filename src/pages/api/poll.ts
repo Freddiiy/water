@@ -1,54 +1,78 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import type {NextApiRequest, NextApiResponse} from "next";
 import {prisma} from "../../server/db/client";
+import {resetIsWatering} from "../../utils/resetIsWatering";
+
 export interface MoistRes {
     responseText: string,
 }
 
 export interface Water {
-    ip: string,
     isWatering: boolean,
-    moistData: MoistData[],
 }
 
 export interface MoistData {
     createdAt: Date,
-    value: number,
+    moisturePercent: number,
+}
+
+interface MouistBody {
+    moisturePercent: number,
 }
 
 
-
-const moist = async (req: NextApiRequest, res: NextApiResponse) => {
+const poll = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method == "POST") {
-        handleMoist(req);
+        const resData = await handleMoist(req);
+        res.status(200).json(resData)
+        await resetIsWatering();
     } else {
         res.status(400).json({
             status: 400,
-            statusText: "This endpoint only recieves POST requests"
+            statusText: "This endpoint only recieves POST requests."
         })
     }
 };
 
 async function handleMoist(req: NextApiRequest) {
-    const data: Water = req.body;
+    const data: MouistBody = req.body;
+    const moist = data.moisturePercent;
 
-    const ipAddress = req.socket.remoteAddress;
-    if (!ipAddress) return;
-    const prismaRes = await prisma.water.upsert({
-        where: {
-            ip: ipAddress,
-        },
-        update: {
-            moistData: {
-                create: {
-                    value: req.body.moiseData,
-                }
-            }
-        },
-        create: {
-            ip: ipAddress,
-
+    const moistRes = await prisma.moistData.create({
+        data: {
+            value: moist,
         }
     });
+
+    const upsertWatering = await prisma.water.upsert({
+        where: {
+            id: 1,
+        },
+        update: {},
+        create: {
+            isWatering: false,
+        }
+    })
+
+    const isWateringRes = await prisma.water.findUnique({
+        where: {
+            id: 1,
+        }
+    });
+
+    if (isWateringRes) {
+        return {
+            isWatering: isWateringRes.isWatering,
+            waterTimeInMs: isWateringRes.waterTimeInMs,
+            threshold: isWateringRes.threshold,
+        }
+    }
+
+    return {
+        isWatering: false,
+        waterTimeInMs: 0,
+        threshold: 40,
+    }
 }
 
-export default moist;
+
+export default poll;
