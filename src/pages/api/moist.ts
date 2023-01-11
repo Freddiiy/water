@@ -1,16 +1,20 @@
 import axios from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
+import {prisma} from "../../server/db/client";
 export interface MoistRes {
     responseText: string,
 }
 
-const moist = async (req: NextApiRequest, res: NextApiResponse<MoistRes>) => {
-    const waterRes = await axios.get("http://192.168.2.70:9000/moist");
-    const data = await waterRes.data;
-    if (waterRes.status == 200) {
-        res.status(200).json({
-            responseText: data,
-        });
+const moist = async (req: NextApiRequest, res: NextApiResponse) => {
+    const moist = req.body.moisturePercent;
+    const moistRes = await prisma.moistData.create({
+        data: {
+            value: moist,
+        }
+    });
+
+    if (moistRes) {
+        res.status(200);
     } else {
         res.status(500);
     }

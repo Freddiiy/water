@@ -21,8 +21,8 @@ interface MouistBody {
 
 
 const poll = async (req: NextApiRequest, res: NextApiResponse) => {
-    if (req.method == "POST") {
-        const resData = await handleMoist(req);
+    if (req.method == "GET") {
+        const resData = await handleMoist();
         res.status(200).json(resData)
         await resetIsWatering();
     } else {
@@ -33,15 +33,7 @@ const poll = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 };
 
-async function handleMoist(req: NextApiRequest) {
-    const data: MouistBody = req.body;
-    const moist = data.moisturePercent;
-
-    const moistRes = await prisma.moistData.create({
-        data: {
-            value: moist,
-        }
-    });
+async function handleMoist() {
 
     const upsertWatering = await prisma.water.upsert({
         where: {
