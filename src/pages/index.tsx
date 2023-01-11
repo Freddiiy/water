@@ -9,7 +9,7 @@ import {MoistData} from "./api/fetch-moist";
 const Home: NextPage = () => {
     const [status, setStatus] = useState("");
     const [healthText, setHealthtext] = useState("Updating health...");
-    const [moist, setMoist] = useState<MoistData[] | undefined>(undefined);
+    const [moist, setMoist] = useState<MoistData[]>([]);
     const [moistText, setMoistText] = useState("Fetching moist...");
     const [waterTimeInMs, setWaterTimeInMs] = useState<number>(1000);
     const [threshold, setThreshold] = useState<number>(40);
