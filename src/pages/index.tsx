@@ -15,6 +15,10 @@ const Home: NextPage = () => {
     const [threshold, setThreshold] = useState<number>(40);
     const [thresholdStatus, setThresholdStatus] = useState("");
 
+    const filterMoist = (arr: MoistData[]) => {
+        return arr.slice(-10);
+    }
+
     async function sendWater() {
         const res = await axios.post(`/api/water`, {
             waterTimeInMs: waterTimeInMs,
@@ -103,7 +107,7 @@ const Home: NextPage = () => {
                     <p className={`text-3xl font-bold ${healthText == "Healthy" ? "text-green-500" : "text-red-600"}`}>{healthText}</p>
                 </div>
                 <div className={"flex flex-col p-5 items-center"}>
-                    {moist ? (moist.map((m) => (
+                    {moist ? (filterMoist(moist).map((m) => (
                         <div key={m.createdAt.toString()}>
                             <p>{m.value}</p>
                             <p>{m.createdAt.toString()}</p>
