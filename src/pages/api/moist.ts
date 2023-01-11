@@ -5,11 +5,6 @@ export interface Fail {
     responseText: string,
 }
 
-export interface MoistData {
-    createdAt: Date,
-    value: number,
-}
-
 const moist = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method == "POST") {
 

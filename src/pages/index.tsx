@@ -3,7 +3,7 @@ import Head from "next/head";
 import axios from "axios";
 import {useEffect, useState} from "react";
 import {HealthRes} from "./api/health";
-import {MoistData} from "./api/moist";
+import {MoistData} from "./api/fetch-moist";
 
 
 const Home: NextPage = () => {
@@ -108,7 +108,7 @@ const Home: NextPage = () => {
                             <p>{m.value}</p>
                             <p>{m.createdAt.toString()}</p>
                         </div>
-                    )) : null}
+                    )) : <p>Fetching moisture data..</p>}
                 </div>
             </main>
         </>
