@@ -23,5 +23,5 @@ model MoistData {
     createdAt DateTime @default(now())
     value Int
     water Water @relation(fields: [waterId], references: [id])
-    waterId Int
+    waterId Int @unique
 }

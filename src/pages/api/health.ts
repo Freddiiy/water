@@ -5,7 +5,7 @@ export interface HealthRes {
 }
 
 const health = async (req: NextApiRequest, res: NextApiResponse<HealthRes>) => {
-    res.status(200);
+    res.status(200).json({responseText: "water"});
 };
 
 export default health;

@@ -31,7 +31,6 @@ const moist = async (req: NextApiRequest, res: NextApiResponse) => {
 async function handleMoist(req: NextApiRequest) {
     const data: Water = req.body;
 
-    /*
     const ipAddress = req.socket.remoteAddress;
     if (!ipAddress) return;
     const prismaRes = await prisma.water.upsert({
@@ -49,9 +48,7 @@ async function handleMoist(req: NextApiRequest) {
             ip: ipAddress,
 
         }
-    })
-    */
-
+    });
 }
 
 export default moist;
