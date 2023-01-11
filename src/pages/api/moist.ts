@@ -11,14 +11,16 @@ export interface MoistData {
 }
 
 const moist = async (req: NextApiRequest, res: NextApiResponse) => {
-    console.log("aaaaaaaaaaaa")
+    console.log("aaaaaaaaaaaa");
     if (req.method == "POST") {
 
         const moist = req.body.moisturePercent;
-        console.log("bbbbbbbbbbbbbb")
+        console.log("bbbbbbbbbbbbbb");
 
         if (!moist) {
-            res.status(400);
+            res.status(400).json({
+                success: false,
+            });
             return;
         }
         const moistRes = await prisma.moistData.create({
@@ -27,10 +29,16 @@ const moist = async (req: NextApiRequest, res: NextApiResponse) => {
             }
         });
 
+        console.log("ccccccccccccc");
+
         if (moistRes) {
-            res.status(200);
+            res.status(200).json({
+                success: true,
+            });
         } else {
-            res.status(500);
+            res.status(500).json({
+                success: false,
+            })
         }
     } else {
         res.status(400).json({
