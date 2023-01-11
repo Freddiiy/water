@@ -1,8 +1,13 @@
 import type {NextApiRequest, NextApiResponse} from "next";
 import {prisma} from "../../server/db/client";
 
-export interface MoistRes {
+export interface Fail {
     responseText: string,
+}
+
+export interface MoistData {
+    createdAt: Date,
+    value: number,
 }
 
 const moist = async (req: NextApiRequest, res: NextApiResponse) => {

@@ -1,15 +1,15 @@
 import type {NextPage} from "next";
 import Head from "next/head";
 import axios from "axios";
-import {ChangeEvent, useEffect, useState} from "react";
-import DatePicker from "react-datepicker"
+import {useEffect, useState} from "react";
 import {HealthRes} from "./api/health";
-import {MoistRes} from "./api/moist";
+import {MoistData} from "./api/moist";
 
 
 const Home: NextPage = () => {
     const [status, setStatus] = useState("");
     const [healthText, setHealthtext] = useState("Updating health...");
+    const [moist, setMoist] = useState<MoistData[] | undefined>(undefined);
     const [moistText, setMoistText] = useState("Fetching moist...");
     const [waterTimeInMs, setWaterTimeInMs] = useState<number>(1000);
     const [threshold, setThreshold] = useState<number>(40);
@@ -52,9 +52,10 @@ const Home: NextPage = () => {
         }
 
         const fetchMoist = async () => {
-            const res = await axios.get<MoistRes>("/api/moist");
+            const res = await axios.get<MoistData[]>("/api/moist");
             const data = await res.data;
-            setMoistText(data.responseText);
+            setMoistText("");
+            setMoist(data)
         }
         fetchHealth();
         fetchMoist()
@@ -102,8 +103,12 @@ const Home: NextPage = () => {
                     <p className={`text-3xl font-bold ${healthText == "Healthy" ? "text-green-500" : "text-red-600"}`}>{healthText}</p>
                 </div>
                 <div className={"flex flex-col p-5 items-center"}>
-                    <h2 className={"text-2xl font-semibold"}>Moist:</h2>
-                    <p className={`text-3xl font-bold ${moistText == "Healthy" ? "text-green-500" : "text-red-600"}`}>{moistText}</p>
+                    {moist ? moist.map((m) => (
+                        <div key={m.createdAt.toString()}>
+                            <p>{m.value}</p>
+                            <p>{m.createdAt.toString()}</p>
+                        </div>
+                    )) : null}
                 </div>
             </main>
         </>
