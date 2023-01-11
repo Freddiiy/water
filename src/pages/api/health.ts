@@ -5,16 +5,7 @@ export interface HealthRes {
 }
 
 const health = async (req: NextApiRequest, res: NextApiResponse<HealthRes>) => {
-    const waterRes = await axios.get("http://192.168.2.70:9000/health");
-    const data = waterRes.data;
-    let responseText = "Unhealthy";
-    console.log(data)
-    if (waterRes.status == 200) {
-       responseText = "Healthy";
-    }
-    res.status(200).json({
-        responseText: responseText,
-    });
+    res.status(200);
 };
 
 export default health;
