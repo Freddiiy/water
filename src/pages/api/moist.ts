@@ -14,6 +14,11 @@ const moist = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method == "POST") {
 
         const moist = req.body.moisturePercent;
+
+        if (!moist) {
+            res.status(400);
+            return;
+        }
         const moistRes = await prisma.moistData.create({
             data: {
                 value: moist,
