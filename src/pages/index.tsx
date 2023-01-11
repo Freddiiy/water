@@ -52,10 +52,10 @@ const Home: NextPage = () => {
         }
 
         const fetchMoist = async () => {
-            const res = await axios.get<MoistData[]>("/api/fetch-moist");
+            const res = await axios.get("/api/fetch-moist");
             const data = await res.data;
             setMoistText("");
-            setMoist(data)
+            setMoist(data.moistArray);
         }
         fetchHealth();
         fetchMoist()

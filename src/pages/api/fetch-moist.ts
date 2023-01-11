@@ -10,7 +10,7 @@ const moist = async (req: NextApiRequest, res: NextApiResponse) => {
 
     if (moistRes) {
         res.status(200).json({
-
+            moistArray: moistRes
         });
     } else {
         res.status(500);
