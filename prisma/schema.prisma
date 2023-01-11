@@ -19,9 +19,9 @@ model Water {
 }
 
 model MoistData {
-    id String @id @default(cuid())
+    id Int @id @default(autoincrement())
     createdAt DateTime @default(now())
     value Int
     water Water @relation(fields: [waterId], references: [id])
-    waterId String
+    waterId Int
 }
