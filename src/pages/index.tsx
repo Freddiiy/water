@@ -114,7 +114,7 @@ const Home: NextPage = () => {
                     <h1 className={"text-4xl font-bold"}>Water my plants</h1>
                 </span>
                 <div className={"grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 pt-10 md:pt-20"}>
-                    <SectionContainer success={waterSuccess} error={thresholdError}>
+                    <SectionContainer success={waterSuccess} error={waterError}>
                         <SectionTitle>Water timer</SectionTitle>
                         <SectionRow>
                             <NumberButton onClick={() => setWaterTimeInMs(waterTimeInMs - 1)}>-</NumberButton>
