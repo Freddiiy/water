@@ -60,7 +60,7 @@ const Home: NextPage = () => {
         }
         if (res.status == 200) {
             setThresholdSuccess(true);
-            setThresholdError(true);
+            setThresholdError(false);
         }
         resetAlert();
         return await res.data;
