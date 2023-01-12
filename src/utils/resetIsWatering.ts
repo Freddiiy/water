@@ -7,7 +7,6 @@ export async function resetIsWatering() {
         },
         data: {
             isWatering: false,
-            waterTimeInMs: 1000,
         }
     })
 }
