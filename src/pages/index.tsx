@@ -13,8 +13,12 @@ import SectionTitle from "../components/SectionTitle";
 
 
 const Home: NextPage = () => {
-    const [waterStatus, setWaterStatus] = useState(false);
-    const [thresholdStatus, setThresholdStatus] = useState(false);
+    const [waterSuccess, setWaterSuccess] = useState(false);
+    const [waterError, setWaterError] = useState(false);
+    const [thresholdSuccess, setThresholdSuccess] = useState(false);
+    const [thresholdError, setThresholdError] = useState(false);
+
+
     const [healthText, setHealthtext] = useState("Checking...");
     const [moist, setMoist] = useState<MoistData[]>([]);
     const [moistText, setMoistText] = useState("Fetching moist...");
@@ -22,6 +26,7 @@ const Home: NextPage = () => {
     const [threshold, setThreshold] = useState<number>(40);
 
     const isHealthy = healthText === "Healthy";
+
 
     const filterMoist = (arr: MoistData[]) => {
         return arr.slice(-60);
@@ -33,10 +38,12 @@ const Home: NextPage = () => {
         });
 
         if (res.status == 500) {
-            setWaterStatus(false);
+            setWaterSuccess(false);
+            setWaterError(true);
         }
         if (res.status == 200) {
-            setWaterStatus(true);
+            setWaterSuccess(true);
+            setWaterError(false);
         }
         resetAlert()
         return await res.data;
@@ -48,16 +55,19 @@ const Home: NextPage = () => {
         });
 
         if (res.status == 500) {
-            setThresholdStatus(false);
+            setThresholdSuccess(false);
+            setThresholdError(true);
         }
         if (res.status == 200) {
-            setThresholdStatus(true)
+            setThresholdSuccess(true);
+            setThresholdError(true);
         }
         resetAlert();
         return await res.data;
     }
 
     useEffect(() => {
+
         const fetchHealth = async () => {
             const res = await axios.get<HealthRes>("/api/health");
             const data = await res.data;
@@ -74,13 +84,20 @@ const Home: NextPage = () => {
             setMoist(data);
         }
         fetchHealth();
-        fetchMoist()
+        fetchMoist();
+        const interval = setInterval(() => {
+            fetchHealth();
+            fetchMoist()
+        }, 5000);
+        return () => clearInterval(interval);
     }, [])
 
     async function resetAlert() {
         await setTimeout(() => {
-            setThresholdStatus(false);
-            setWaterStatus(false);
+            setThresholdSuccess(false);
+            setThresholdError(false);
+            setWaterSuccess(false);
+            setWaterError(false);
         }, 3000)
     }
 
@@ -97,7 +114,7 @@ const Home: NextPage = () => {
                     <h1 className={"text-4xl font-bold"}>Water my plants</h1>
                 </span>
                 <div className={"grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 pt-10 md:pt-20"}>
-                    <SectionContainer success={waterStatus}>
+                    <SectionContainer success={waterSuccess} error={thresholdError}>
                         <SectionTitle>Water timer</SectionTitle>
                         <SectionRow>
                             <NumberButton onClick={() => setWaterTimeInMs(waterTimeInMs - 1)}>-</NumberButton>
@@ -113,10 +130,10 @@ const Home: NextPage = () => {
                             onClick={() => sendWater()}>
                             Water
                         </ActionButton>
-                        <p className={"text-2xl"}>{waterStatus}</p>
+                        <p className={"text-2xl"}>{waterSuccess}</p>
                     </SectionContainer>
 
-                    <SectionContainer success={thresholdStatus}>
+                    <SectionContainer success={thresholdSuccess} error={thresholdError}>
                         <SectionTitle>Set new threshold</SectionTitle>
                         <SectionRow>
                             <NumberButton onClick={() => setThreshold(threshold - 1)}>-</NumberButton>
@@ -131,11 +148,11 @@ const Home: NextPage = () => {
                             onClick={() => sendThreshold()}>
                             Update
                         </ActionButton>
-                        <p className={"text-2xl"}>{thresholdStatus}</p>
+                        <p className={"text-2xl"}>{thresholdSuccess}</p>
                     </SectionContainer>
 
                     <div>
-                        <SectionContainer success={isHealthy}>
+                        <SectionContainer success={isHealthy} error={!isHealthy}>
                             <SectionTitle>Health check:</SectionTitle>
                             <SectionRow>
                                 <div className={"flex flex-col items-center"}>
