@@ -15,7 +15,7 @@ import SectionTitle from "../components/SectionTitle";
 const Home: NextPage = () => {
     const [waterStatus, setWaterStatus] = useState(false);
     const [thresholdStatus, setThresholdStatus] = useState(false);
-    const [healthText, setHealthtext] = useState("Updating health...");
+    const [healthText, setHealthtext] = useState("Checking...");
     const [moist, setMoist] = useState<MoistData[]>([]);
     const [moistText, setMoistText] = useState("Fetching moist...");
     const [waterTimeInMs, setWaterTimeInMs] = useState<number>(1000);
