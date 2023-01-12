@@ -19,7 +19,7 @@ const health = async (req: NextApiRequest, res: NextApiResponse<HealthRes>) => {
     const latestUpdate = new Date(latestUpdateRaw.createdAt)
     const currentTime = new Date();
 
-    const isHealthy = currentTime.getTime() - latestUpdate.getTime() < (30 * 1000) ? "Healthy" : "Unhealthy"
+    const isHealthy = currentTime.getTime() - latestUpdate.getTime() < (30 * 1000) ? "Online" : "Offline"
 
 
     res.status(200).json({responseText: isHealthy});
