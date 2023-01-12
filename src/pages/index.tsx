@@ -165,6 +165,10 @@ const Home: NextPage = () => {
 
                     <SectionContainer>
                         <SectionTitle>Results</SectionTitle>
+                            <div className={"w-full flex justify-between items-center py-0.5 px-3 border-b text-xs"}>
+                                <p>Moist</p>
+                                <p>Date & Time</p>
+                            </div>
                         <div className={"h-96 w-full overflow-y-auto"}>
                             {moist ? (filterMoist(moist).reverse().map((m) => (
                                 <div key={m.createdAt.toString()}
