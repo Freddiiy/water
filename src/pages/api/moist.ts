@@ -10,7 +10,7 @@ const moist = async (req: NextApiRequest, res: NextApiResponse) => {
 
         const moist:number = req.body.moisturePercent;
 
-        if (moist < 0 || moist > 100) {
+        if (moist < 0 || moist > 4095) {
             res.status(400).json({
                 success: false,
             });
