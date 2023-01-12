@@ -115,7 +115,8 @@ const Home: NextPage = () => {
                 </span>
                 <div className={"grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 pt-10 md:pt-20"}>
                     <SectionContainer success={waterSuccess} error={waterError}>
-                        <SectionTitle>Water timer</SectionTitle>
+                        <SectionTitle>Water</SectionTitle>
+                        <SectionRow><p className={"text-lg font-semibold"}>Set timer in ms</p></SectionRow>
                         <SectionRow>
                             <NumberButton onClick={() => setWaterTimeInMs(waterTimeInMs - 1)}>-</NumberButton>
                             <NumberInput
@@ -134,7 +135,8 @@ const Home: NextPage = () => {
                     </SectionContainer>
 
                     <SectionContainer success={thresholdSuccess} error={thresholdError}>
-                        <SectionTitle>Set new threshold</SectionTitle>
+                        <SectionTitle>Threshold</SectionTitle>
+                        <SectionRow><p className={"text-lg font-semibold"}>Set new auto threshold</p></SectionRow>
                         <SectionRow>
                             <NumberButton onClick={() => setThreshold(threshold - 1)}>-</NumberButton>
                             <NumberInput
