@@ -9,9 +9,7 @@ const moist = async (req: NextApiRequest, res: NextApiResponse) => {
     const moistRes = await prisma.moistData.findMany();
 
     if (moistRes) {
-        res.status(200).json({
-            moistArray: moistRes
-        });
+        res.status(200).json(moistRes);
     } else {
         res.status(500);
     }
